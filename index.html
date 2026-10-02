@@ -1,63 +1,50 @@
 <!doctype html>
 <html lang="tr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#002b49">
-  <title>TUI BLUE Palm Garden Paylaşım Merkezi</title>
-  <meta http-equiv="refresh" content="0;url=https://script.google.com/macros/s/AKfycbyce71v4QO3dT6w3d0TJTge3AfvBJWrsVKXcK5Gvg6LZ_rvY4kjjezCjrMSXu36PCry/exec">
-  <style>
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background:linear-gradient(135deg,#002b49,#005b83);
-      font-family:Arial,sans-serif;
-      color:#fff;
-    }
-    .box{
-      text-align:center;
-      padding:28px;
-      max-width:420px;
-    }
-    .icon{
-      width:72px;
-      height:72px;
-      margin:0 auto 18px;
-      border-radius:22px;
-      background:rgba(255,255,255,.14);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:34px;
-      animation:pulse 1.6s ease-in-out infinite;
-    }
-    h1{font-size:22px;margin:0 0 8px}
-    p{font-size:14px;opacity:.85;margin:0 0 18px}
-    a{
-      color:#fff;
-      font-weight:700;
-    }
-    @keyframes pulse{
-      0%,100%{transform:scale(1)}
-      50%{transform:scale(1.08)}
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#002b49">
+<title>TUI BLUE Palm Garden Paylaşım Merkezi</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f4f7f9;font-family:Arial,sans-serif}
+#appFrame{position:fixed;inset:0;width:100%;height:100%;border:0;background:#f4f7f9}
+#boot{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#002b49,#005b83);color:#fff;transition:opacity .3s}
+.bootbox{text-align:center;padding:24px}.hub{width:72px;height:72px;border-radius:22px;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:34px;animation:pulse 1.5s infinite}
+h1{font-size:21px;margin:0 0 7px}p{font-size:13px;opacity:.82;margin:0}
+#error{display:none;position:fixed;inset:0;z-index:11;align-items:center;justify-content:center;background:#f4f7f9;padding:20px}
+.errbox{max-width:460px;background:#fff;border:1px solid #dbe6ec;border-radius:18px;padding:26px;text-align:center;box-shadow:0 14px 40px rgba(0,43,73,.12);color:#173b54}
+.errbox button{margin-top:15px;border:0;background:#003f62;color:#fff;padding:11px 18px;border-radius:10px;font-weight:700;cursor:pointer}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.09)}}
+</style>
 </head>
 <body>
-  <div class="box">
-    <div class="icon">↗</div>
-    <h1>Paylaşım Merkezi</h1>
-    <p>Uygulama açılıyor…</p>
-    <a href="https://script.google.com/macros/s/AKfycbyce71v4QO3dT6w3d0TJTge3AfvBJWrsVKXcK5Gvg6LZ_rvY4kjjezCjrMSXu36PCry/exec">Açılmazsa buraya tıklayın</a>
-  </div>
+<div id="boot"><div class="bootbox"><div class="hub">◆</div><h1>Paylaşım Merkezi</h1><p>Güvenli uygulama yükleniyor…</p></div></div>
+<div id="error"><div class="errbox"><h2>Uygulama yüklenemedi</h2><p style="margin-top:8px;line-height:1.55">Apps Script Web App dağıtımını <b>Yeni sürüm</b> olarak güncelleyin ve erişimi <b>Herkes / Anyone</b> yapın.</p><button onclick="location.reload()">Tekrar Dene</button></div></div>
+<iframe id="appFrame" title="TUI BLUE Palm Garden Paylaşım Merkezi" src="https://script.google.com/macros/s/AKfycbyce71v4QO3dT6w3d0TJTge3AfvBJWrsVKXcK5Gvg6LZ_rvY4kjjezCjrMSXu36PCry/exec?embed=1&v=14" referrerpolicy="origin" allow="clipboard-read; clipboard-write"></iframe>
+<script>
+(async()=>{
+  try{
+    if('serviceWorker' in navigator){
+      const regs=await navigator.serviceWorker.getRegistrations();
+      for(const r of regs)await r.unregister();
+    }
+    if(window.caches){
+      const keys=await caches.keys();
+      await Promise.all(keys.map(k=>caches.delete(k)));
+    }
+  }catch(e){}
+})();
 
-  <script>
-    const target = 'https://script.google.com/macros/s/AKfycbyce71v4QO3dT6w3d0TJTge3AfvBJWrsVKXcK5Gvg6LZ_rvY4kjjezCjrMSXu36PCry/exec';
-    window.location.replace(target);
-  </script>
+const boot=document.getElementById('boot'),err=document.getElementById('error'),frame=document.getElementById('appFrame');
+let ready=false;
+window.addEventListener('message',e=>{
+  if(e.source!==frame.contentWindow)return;
+  const d=e.data||{};
+  if(d.source==='PM_APP'&&d.type==='READY'){
+    ready=true;boot.style.opacity='0';setTimeout(()=>boot.style.display='none',320);
+  }
+});
+setTimeout(()=>{if(!ready){boot.style.display='none';err.style.display='flex'}},15000);
+</script>
 </body>
 </html>
