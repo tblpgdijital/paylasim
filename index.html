@@ -9,40 +9,138 @@
 <style>
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f4f7f9;font-family:Arial,sans-serif}
 #appFrame{position:fixed;inset:0;width:100%;height:100%;border:0;background:#f4f7f9}
-#boot{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#002b49,#005b83);color:#fff;transition:opacity .3s}
-.bootbox{text-align:center;padding:24px}.hub{width:72px;height:72px;border-radius:22px;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:34px;animation:pulse 1.5s infinite}
-h1{font-size:21px;margin:0 0 7px}p{font-size:13px;opacity:.82;margin:0}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.09)}}
+
+/* ============================================================
+   PAYLAŞIM MERKEZİ ORTAK AÇILIŞ ANİMASYONU
+   GitHub açılışı ve şifre sonrası girişte aynı görsel kullanılır.
+   ============================================================ */
+.pm-loader-screen{
+  position:fixed;inset:0;z-index:7000;display:flex;align-items:center;justify-content:center;
+  padding:20px;overflow:hidden;color:#fff;
+  background:
+    radial-gradient(circle at 18% 15%,rgba(0,150,136,.22),transparent 33%),
+    radial-gradient(circle at 84% 82%,rgba(0,116,184,.20),transparent 34%),
+    linear-gradient(145deg,#002b49 0%,#004f78 55%,#00344f 100%);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)
+}
+.pm-loader-card{
+  width:min(520px,92vw);text-align:center;padding:30px 28px 26px;border-radius:26px;
+  background:linear-gradient(145deg,rgba(255,255,255,.12),rgba(255,255,255,.07));
+  border:1px solid rgba(255,255,255,.17);
+  box-shadow:0 30px 70px rgba(0,0,0,.27),inset 0 1px 0 rgba(255,255,255,.10);
+  position:relative;overflow:hidden
+}
+.pm-loader-card:before{
+  content:"";position:absolute;inset:-40%;background:linear-gradient(115deg,transparent 44%,rgba(255,255,255,.08) 50%,transparent 56%);
+  animation:pmShine 3.8s ease-in-out infinite;pointer-events:none
+}
+.pm-loader-brand{position:relative;font-size:11px;font-weight:900;letter-spacing:1.05px;color:rgba(255,255,255,.82)}
+.pm-sync-visual{position:relative;width:184px;height:184px;margin:22px auto 18px}
+.pm-ring{position:absolute;border-radius:50%}
+.pm-ring-1{inset:0;border:2px solid rgba(255,255,255,.12);border-top:3px solid #4fe3c8;animation:pmRing 2.2s linear infinite}
+.pm-ring-2{inset:18px;border:1px solid rgba(255,255,255,.14);border-left:2px solid #63cbff;animation:pmRing 3s linear infinite reverse}
+.pm-ring-3{inset:39px;border:2px dashed rgba(255,255,255,.48);animation:pmRing 4.2s linear infinite}
+.pm-sync-core{
+  position:absolute;inset:55px;border-radius:24px;display:grid;place-items:center;
+  background:linear-gradient(145deg,#0faac5,#0074a8 57%,#00517c);
+  box-shadow:0 14px 35px rgba(0,0,0,.28),0 0 32px rgba(79,227,200,.15);
+  animation:pmCore 1.8s ease-in-out infinite
+}
+.pm-sync-core span{font-size:36px;font-weight:900;display:block;animation:pmCoreSpin 2.8s linear infinite}
+.pm-sync-dot{
+  position:absolute;width:35px;height:35px;border-radius:50%;display:grid;place-items:center;
+  background:#fff;color:#006b9c;border:3px solid rgba(0,43,73,.12);
+  box-shadow:0 8px 22px rgba(0,0,0,.19);font-size:15px;font-weight:900
+}
+.pm-sync-dot.d1{left:-2px;top:72px;animation:pmDot 2.4s ease-in-out infinite}
+.pm-sync-dot.d2{right:8px;top:18px;animation:pmDot 2.4s ease-in-out .35s infinite}
+.pm-sync-dot.d3{right:-2px;bottom:26px;animation:pmDot 2.4s ease-in-out .7s infinite}
+.pm-sync-dot.d4{left:25px;bottom:4px;animation:pmDot 2.4s ease-in-out 1.05s infinite}
+.pm-loader-title{position:relative;margin:0;font-size:22px;line-height:1.35;font-weight:900}
+.pm-loader-subtitle{position:relative;margin:7px auto 0;max-width:410px;color:rgba(255,255,255,.72);font-size:12px;line-height:1.6}
+.pm-loader-progress-wrap{position:relative;margin:21px auto 0;max-width:390px}
+.pm-loader-progress-meta{display:flex;justify-content:space-between;font-size:11px;font-weight:800;color:rgba(255,255,255,.82);margin-bottom:7px}
+.pm-loader-progress{height:7px;border-radius:99px;background:rgba(255,255,255,.14);overflow:hidden}
+.pm-loader-progress span{display:block;height:100%;width:8%;border-radius:99px;background:linear-gradient(90deg,#4fe3c8,#5fc4ff);transition:width .22s ease;box-shadow:0 0 14px rgba(79,227,200,.38)}
+.pm-loader-steps{position:relative;margin-top:16px;display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.pm-step{padding:7px 5px;border-radius:9px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.06);color:rgba(255,255,255,.55);font-size:10px;font-weight:800;transition:.22s}
+.pm-step.ready{background:rgba(79,227,200,.14);border-color:rgba(79,227,200,.36);color:#d9fff7}
+@keyframes pmRing{to{transform:rotate(360deg)}}
+@keyframes pmCore{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+@keyframes pmCoreSpin{to{transform:rotate(360deg)}}
+@keyframes pmDot{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-6px) scale(1.07)}}
+@keyframes pmShine{0%,55%{transform:translateX(-45%) rotate(10deg)}90%,100%{transform:translateX(45%) rotate(10deg)}}
+@media(max-width:600px){
+  .pm-loader-card{padding:24px 16px 20px;border-radius:22px}
+  .pm-sync-visual{width:164px;height:164px}
+  .pm-sync-core{inset:50px}
+  .pm-loader-title{font-size:19px}
+  .pm-loader-steps{gap:5px}
+  .pm-step{font-size:9px;padding:6px 3px}
+}
+
+#boot{z-index:20}
 </style>
 </head>
 <body>
-<div id="boot"><div class="bootbox"><div class="hub">◆</div><h1>Paylaşım Merkezi</h1><p>Güvenli uygulama yükleniyor…</p></div></div>
-<iframe id="appFrame" title="TUI BLUE Palm Garden Paylaşım Merkezi" src="https://script.google.com/macros/s/AKfycbyce71v4QO3dT6w3d0TJTge3AfvBJWrsVKXcK5Gvg6LZ_rvY4kjjezCjrMSXu36PCry/exec?embed=1&v=15" referrerpolicy="no-referrer" loading="eager"></iframe>
+<div id="boot" class="pm-loader-screen"><div class="pm-loader-card">
+  <div class="pm-loader-brand">TUI BLUE PALM GARDEN • PAYLAŞIM MERKEZİ</div>
+  <div class="pm-sync-visual" aria-hidden="true">
+    <div class="pm-ring pm-ring-1"></div>
+    <div class="pm-ring pm-ring-2"></div>
+    <div class="pm-ring pm-ring-3"></div>
+    <div class="pm-sync-core"><span>↻</span></div>
+    <span class="pm-sync-dot d1">✓</span>
+    <span class="pm-sync-dot d2">✦</span>
+    <span class="pm-sync-dot d3">☑</span>
+    <span class="pm-sync-dot d4">●</span>
+  </div>
+  <h2 class="pm-loader-title">Paylaşım Merkezi hazırlanıyor</h2>
+  <p class="pm-loader-subtitle">Güvenli bağlantı kuruluyor ve portal verileriniz hazırlanıyor.</p>
+  <div class="pm-loader-progress-wrap">
+    <div class="pm-loader-progress-meta"><span id="ghLoaderStatus">Güvenli bağlantı</span><span id="ghLoaderPct">8%</span></div>
+    <div class="pm-loader-progress"><span id="ghLoaderBar"></span></div>
+  </div>
+  <div class="pm-loader-steps">
+    <div class="pm-step" data-step="1">Giriş</div>
+    <div class="pm-step" data-step="2">Anketler</div>
+    <div class="pm-step" data-step="3">Paylaşımlar</div>
+    <div class="pm-step" data-step="4">Hazır</div>
+  </div>
+</div></div>
+<iframe id="appFrame" title="TUI BLUE Palm Garden Paylaşım Merkezi" src="https://script.google.com/macros/s/AKfycbyce71v4QO3dT6w3d0TJTge3AfvBJWrsVKXcK5Gvg6LZ_rvY4kjjezCjrMSXu36PCry/exec?embed=1&v=17" referrerpolicy="no-referrer" loading="eager"></iframe>
 <script>
 (async()=>{
-  try{
-    if('serviceWorker' in navigator){
-      const regs=await navigator.serviceWorker.getRegistrations();
-      for(const r of regs)await r.unregister();
-    }
-    if(window.caches){
-      const keys=await caches.keys();
-      await Promise.all(keys.map(k=>caches.delete(k)));
-    }
-  }catch(e){}
+ try{
+  if('serviceWorker' in navigator){
+   const regs=await navigator.serviceWorker.getRegistrations();
+   for(const r of regs)await r.unregister();
+  }
+  if(window.caches){
+   const keys=await caches.keys();
+   await Promise.all(keys.map(k=>caches.delete(k)));
+  }
+ }catch(e){}
 })();
 
-const boot=document.getElementById('boot');
-const frame=document.getElementById('appFrame');
-let hidden=false;
-function hideBoot(){
-  if(hidden)return;
-  hidden=true;
-  boot.style.opacity='0';
-  setTimeout(()=>boot.style.display='none',320);
+const boot=document.getElementById('boot'),frame=document.getElementById('appFrame');
+const bar=document.getElementById('ghLoaderBar'),pct=document.getElementById('ghLoaderPct'),status=document.getElementById('ghLoaderStatus');
+const steps=[...document.querySelectorAll('#boot .pm-step')];
+let value=8,loaded=false,finished=false;
+function paint(){
+ value=Math.min(loaded?100:90,value+(value<45?5:value<72?3:1));
+ if(bar)bar.style.width=value+'%';if(pct)pct.textContent=value+'%';
+ if(status)status.textContent=value<28?'Güvenli bağlantı':value<50?'Portal yükleniyor':value<72?'Veriler hazırlanıyor':value<90?'Son kontroller':'Portal hazır';
+ const th=[22,44,66,84];steps.forEach((el,i)=>el.classList.toggle('ready',value>=th[i]));
 }
-frame.addEventListener('load',()=>setTimeout(hideBoot,250));
-setTimeout(hideBoot,8000);
+const timer=setInterval(()=>{paint();if(loaded&&value>=100)finish()},120);
+function finish(){
+ if(finished)return;finished=true;clearInterval(timer);
+ value=100;paint();steps.forEach(x=>x.classList.add('ready'));
+ setTimeout(()=>{boot.style.opacity='0';setTimeout(()=>boot.style.display='none',350)},240);
+}
+frame.addEventListener('load',()=>{loaded=true;if(value<92)value=92;paint();setTimeout(finish,420)});
+setTimeout(()=>{loaded=true;finish()},9000);
 </script>
 </body>
 </html>
