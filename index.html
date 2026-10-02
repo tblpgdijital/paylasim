@@ -32,15 +32,6 @@ body{background:var(--bg);color:var(--txt);min-height:100vh}.hidden{display:none
     <p style="font-size:13px;color:#666;margin-bottom:15px">Lütfen Eğitim Portalı şifrenizi giriniz.</p>
     <input id="password" type="password" autocomplete="current-password" placeholder="ŞİFRENİZ" oninput="this.value=this.value.toLocaleUpperCase('tr-TR')">
     <button class="btn" onclick="login()">Giriş Yap</button>
-    <div style="display:flex;justify-content:space-between;margin-top:15px"><button class="link-btn" onclick="showAuth('resetCard')">Şifremi Unuttum</button><button class="link-btn" onclick="showAuth('registerCard')">Yeni Üyelik Oluştur</button></div>
-  </div>
-  <div id="registerCard" class="auth-card hidden">
-    <div class="logo-box"><img src="logopaymer.png"></div><div class="section-title">Yeni Üyelik / Kayıt Ol</div><div id="regAlert" class="alert"></div>
-    <input id="regName" placeholder="ADINIZ SOYADINIZ" oninput="this.value=this.value.toLocaleUpperCase('tr-TR')"><select id="regDep"></select><input id="regTitle" placeholder="GÖREV UNVANINIZ" oninput="this.value=this.value.toLocaleUpperCase('tr-TR')"><input id="regPass" type="password" placeholder="YENİ ŞİFRENİZ" oninput="this.value=this.value.toLocaleUpperCase('tr-TR')"><button class="btn btn-success" onclick="registerUser()">Kayıt Talebi Oluştur</button><button class="link-btn" style="margin-top:15px" onclick="showAuth('loginCard')">Giriş Ekranına Dön</button>
-  </div>
-  <div id="resetCard" class="auth-card hidden">
-    <div class="logo-box"><img src="logopaymer.png"></div><div class="section-title">Şifre Sıfırlama</div><div id="resetAlert" class="alert"></div>
-    <input id="resetId" placeholder="EĞİTİM ID"><input id="resetCode" placeholder="12 HANELİ KURTARMA KODU"><button class="btn" onclick="resetPassword()">Şifreyi Sıfırla</button><button class="link-btn" style="margin-top:15px" onclick="showAuth('loginCard')">Giriş Ekranına Dön</button>
   </div>
 </div>
 
@@ -52,10 +43,8 @@ body{background:var(--bg);color:var(--txt);min-height:100vh}.hidden{display:none
 </div>
 <script src="config.js"></script>
 <script>
-const DEPS=['GENEL MÜDÜRLÜK','İNSAN KAYNAKLARI','KALİTE YÖNETİM','TEKNİK SERVİS','ÖN BÜRO','F&B RESTAURANT','F&B BAR','MUTFAK','BULAŞIKHANE','KAT HİZMETLERİ','GÜVENLİK','ANİMASYON','SPA','SATIN ALMA','MUHASEBE','BAHÇE','ÇAMAŞIRHANE'];
 let TOKEN=localStorage.getItem('pm_token')||'',DATA=null,PERSON=null,CURRENT='home';
 let CLIENT=localStorage.getItem('pm_client');if(!CLIENT){CLIENT=(crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random());localStorage.setItem('pm_client',CLIENT)}
-regDep.innerHTML='<option value="">Departman Seçiniz</option>'+DEPS.map(x=>`<option>${x}</option>`).join('');
 function api(action,obj={}){
  if(!window.PM_APPS_SCRIPT_URL||window.PM_APPS_SCRIPT_URL.includes('PASTE_'))return Promise.reject(new Error('config.js içine Apps Script Web App URL’sini yazın.'));
  return new Promise((resolve,reject)=>{
@@ -67,15 +56,13 @@ function api(action,obj={}){
    let timer;
    const done=()=>{clearTimeout(timer);window.removeEventListener('message',onmsg);setTimeout(()=>{frame.remove();form.remove()},0)};
    const onmsg=e=>{const d=e.data||{};if(d.source==='PM_BRIDGE'&&d.requestId===id){done();resolve(d.result)}};
-   window.addEventListener('message',onmsg);timer=setTimeout(()=>{done();reject(new Error('Sunucu yanıt vermedi. İnternet bağlantınızı kontrol edin.'))},30000);form.submit();
+   window.addEventListener('message',onmsg);timer=setTimeout(()=>{done();reject(new Error('Sunucu yanıt vermedi. Apps Script dağıtımının güncel Code.gs ile yeniden dağıtıldığını kontrol edin.'))},45000);form.submit();
  });
 }
-function load(v){loading.classList.toggle('show',!!v)}function alertBox(id,msg,type='err'){const e=document.getElementById(id);e.className='alert show '+type;e.textContent=msg}function showAuth(id){['loginCard','registerCard','resetCard'].forEach(x=>document.getElementById(x).classList.toggle('hidden',x!==id))}
+function load(v){loading.classList.toggle('show',!!v)}function alertBox(id,msg,type='err'){const e=document.getElementById(id);e.className='alert show '+type;e.textContent=msg}
 async function login(){const p=password.value.trim().toLocaleUpperCase('tr-TR');if(!p)return alertBox('loginAlert','Lütfen şifrenizi giriniz.');load(1);try{const r=await api('login',{password:p,clientKey:CLIENT});if(!r.ok){alertBox('loginAlert',r.message,r.warning?'warn':'err');return}TOKEN=r.token;localStorage.setItem('pm_token',TOKEN);PERSON=r.person;DATA=r.data;openApp()}catch(e){alertBox('loginAlert',e.message)}finally{load(0)}}
 async function resume(){if(!TOKEN)return;try{const r=await api('resume',{token:TOKEN});if(r.ok){PERSON=r.person;DATA=r.data;openApp()}else{localStorage.removeItem('pm_token');TOKEN=''}}catch(e){}}
 async function logout(){try{await api('logout',{token:TOKEN})}catch(e){}localStorage.removeItem('pm_token');location.reload()}
-async function registerUser(){load(1);try{const r=await api('register',{name:regName.value,department:regDep.value,title:regTitle.value,password:regPass.value});alertBox('regAlert',r.message,r.ok?'ok':'err');if(r.ok)alertBox('regAlert',r.message+' Eğitim ID: '+r.educationId+' | Kurtarma Kodu: '+r.recoveryCode,'ok')}catch(e){alertBox('regAlert',e.message)}finally{load(0)}}
-async function resetPassword(){load(1);try{const r=await api('resetPassword',{educationId:resetId.value,recoveryCode:resetCode.value});alertBox('resetAlert',r.message,r.ok?'ok':'err')}catch(e){alertBox('resetAlert',e.message)}finally{load(0)}}
 function openApp(){auth.classList.add('hidden');shell.classList.remove('hidden');who.textContent=PERSON.adSoyad+' • '+PERSON.departman;buildMenu();nav('home')}
 function buildMenu(){let a=[['home','⌂ Ana Sayfa'],['ann','📣 Duyurular'],['survey','☑ Aylık Anketim'],['mini','◉ Mini Anketler'],['idea','💡 Bir Fikrim Var'],['issue','💬 Bir Sorunum Var'],['records','▣ Kayıtlarım'],['notif','🔔 Bildirimler'],['profile','🔑 Şifre Değiştir']];if(PERSON.isManager)a.push(['manage','📊 Yönetim Özeti']);menu.innerHTML=a.map(x=>`<button data-v="${x[0]}" onclick="nav('${x[0]}');toggleMenu(false)">${x[1]}</button>`).join('')}
 function toggleMenu(force){const on=typeof force==='boolean'?force:!sidebar.classList.contains('open');sidebar.classList.toggle('open',on);overlay.classList.toggle('open',on)}
