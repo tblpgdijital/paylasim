@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#002b49">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,500,0,0">
 <title>TUI BLUE Palm Garden Paylaşım Merkezi</title>
 <style>
 :root{--p:#002b49;--s:#004d80;--a:#009688;--d:#c62828;--bg:#f4f6f9;--card:#fff;--txt:#333;--bd:#cbd5e1}
@@ -19,6 +20,32 @@ body{background:var(--bg);color:var(--txt);min-height:100vh}.hidden{display:none
 .panel{display:none}.panel.active{display:block}.content{max-width:1300px;margin:auto;padding:15px 15px 85px}.hero{background:linear-gradient(135deg,var(--p),var(--s));color:#fff;border-radius:14px;padding:20px;margin-bottom:15px}.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.stat,.card{background:#fff;border:1px solid #e5eaf0;border-radius:12px;padding:15px;margin-bottom:15px;box-shadow:0 2px 8px #00000008}.stat{text-align:center;margin:0}.stat b{display:block;font-size:24px;color:var(--p)}.stat span{font-size:11px;color:#64748b}.quick{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:15px 0}.quick button{border:0;background:#fff;border-radius:12px;padding:20px 8px;box-shadow:0 2px 8px #0001;color:var(--p);font-weight:700}.list{border-bottom:1px solid #edf1f4;padding:12px 0}.list:last-child{border-bottom:0}.meta{font-size:12px;color:#64748b;margin-top:4px}.pill{display:inline-block;background:#eef4f7;border-radius:999px;padding:4px 8px;font-size:11px}.field{margin-bottom:12px}.field label{display:block;font-size:12px;font-weight:700;margin-bottom:5px}.field input,.field select,.field textarea{width:100%;padding:11px;border:1px solid var(--bd);border-radius:8px}.field textarea{min-height:100px}.rating{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.rating button{width:45px;height:45px;border:1px solid var(--bd);background:#fff;border-radius:9px;font-size:20px}.rating button.sel{background:var(--p);color:#fff}
 .bottom{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #dbe3e8;display:grid;grid-template-columns:repeat(5,1fr);z-index:90}.bottom button{border:0;background:none;padding:8px 2px;font-size:10px;color:#60727f}.bottom b{display:block;font-size:19px;margin-bottom:2px}.offline{position:fixed;top:0;left:0;right:0;background:#9c6500;color:#fff;text-align:center;padding:5px;font-size:11px;z-index:3000;display:none}
 @media(min-width:768px){.stats{grid-template-columns:repeat(5,1fr)}.quick{grid-template-columns:repeat(4,1fr)}.bottom{display:none}.content{padding-bottom:20px}}
+
+/* v7 UI */
+body{font-size:16px}
+.header-title{font-size:17px!important}.header-logo{font-size:13px!important}
+.sidebar{width:300px!important;left:-300px!important}.sidebar.open{left:0!important}
+.sidebar-header h3{font-size:22px}.sidebar-header p{font-size:15px;line-height:1.45;margin-top:6px}
+.sidebar-menu button{font-size:16px!important;padding:13px 18px!important;display:flex;align-items:center;gap:12px;transition:.2s}
+.sidebar-menu button:hover{background:#f3f8fb;transform:translateX(3px)}
+.menu-icon,.bottom-icon,.quick-icon{font-family:'Material Symbols Rounded';font-weight:500;font-style:normal;font-size:23px;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:11px;background:#eef6fa;color:var(--s);transition:.22s}
+.sidebar-menu button:hover .menu-icon{transform:translateY(-2px) scale(1.1) rotate(-3deg);box-shadow:0 5px 12px #004d8024}
+.sidebar-menu button.active .menu-icon{background:var(--s);color:#fff;animation:iconPop .38s ease}
+@keyframes iconPop{0%{transform:scale(.78)}60%{transform:scale(1.16)}100%{transform:scale(1)}}
+.section-title{font-size:17px!important}.card{font-size:16px;line-height:1.5}.card h3{font-size:19px}.meta{font-size:14px!important}.pill{font-size:13px!important;padding:6px 10px!important}
+.btn{font-size:16px!important;padding:13px 16px!important}.field label{font-size:14px!important}.field input,.field select,.field textarea{font-size:16px!important;padding:12px!important}
+.stat b{font-size:27px!important}.stat span{font-size:13px!important}
+.quick button{font-size:15px!important;transition:.2s}.quick button:hover{transform:translateY(-3px);box-shadow:0 8px 20px #002b4918}
+.quick-icon{margin:0 auto 7px;width:42px;height:42px;font-size:26px}
+.bottom button{font-size:11px!important;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}.bottom-icon{width:31px;height:31px;font-size:21px;background:transparent}.bottom button:active .bottom-icon{transform:scale(.86)}
+.mini-option{width:100%;min-height:56px;margin-top:9px;border:2px solid #d9e5eb;background:#fff;color:var(--p);border-radius:12px;padding:12px 16px;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;transition:.2s;box-shadow:0 2px 7px #00000008}
+.mini-option:hover:not(:disabled){border-color:#6aa2bd;transform:translateY(-1px);box-shadow:0 6px 14px #002b4914}
+.mini-option.selected{background:#1d9b63;color:#fff;border-color:#168453;box-shadow:0 8px 18px rgba(29,155,99,.25)}
+.mini-option:disabled{cursor:default;opacity:1}
+.mini-check{width:30px;height:30px;border-radius:50%;background:#fff;color:#168453;display:flex;align-items:center;justify-content:center;font-family:'Material Symbols Rounded';font-size:22px;font-weight:700;animation:checkPop .35s ease}
+@keyframes checkPop{0%{transform:scale(.4) rotate(-25deg);opacity:0}70%{transform:scale(1.15) rotate(4deg)}100%{transform:scale(1);opacity:1}}
+@media(max-width:767px){body{font-size:16px}.header-title{font-size:15px!important}.sidebar{width:86vw!important;left:-86vw!important;max-width:320px}.sidebar.open{left:0!important}.content{padding:14px 12px 86px!important}}
+
 </style>
 </head>
 <body>
@@ -39,7 +66,13 @@ body{background:var(--bg);color:var(--txt);min-height:100vh}.hidden{display:none
 <header class="app-header"><button class="menu-btn" onclick="toggleMenu()">☰</button><div class="header-title">TUI BLUE Palm Garden Paylaşım Merkezi</div><div class="header-logo">Çalışan Deneyimi</div></header>
 <aside id="sidebar" class="sidebar"><div class="sidebar-header"><h3>Paylaşım Merkezi</h3><p id="who"></p></div><div class="sidebar-menu" id="menu"></div><div style="padding:15px"><button class="btn" onclick="logout()">Çıkış</button></div></aside><div id="overlay" class="overlay" onclick="toggleMenu()"></div>
 <main id="content" class="content"></main>
-<nav class="bottom"><button onclick="nav('home')"><b>⌂</b>Ana Sayfa</button><button onclick="nav('survey')"><b>☑</b>Anket</button><button onclick="nav('idea')"><b>💡</b>Fikir</button><button onclick="nav('issue')"><b>💬</b>Sorun</button><button onclick="nav('records')"><b>▣</b>Kayıtlarım</button></nav>
+<nav class="bottom">
+<button onclick="nav('home')"><span class="bottom-icon">home</span>Ana Sayfa</button>
+<button onclick="nav('survey')"><span class="bottom-icon">fact_check</span>Anket</button>
+<button onclick="nav('idea')"><span class="bottom-icon">lightbulb</span>Fikir</button>
+<button onclick="nav('issue')"><span class="bottom-icon">forum</span>Sorun</button>
+<button onclick="nav('records')"><span class="bottom-icon">inventory_2</span>Kayıtlarım</button>
+</nav>
 </div>
 <script src="config.js"></script>
 <script>
@@ -64,28 +97,54 @@ async function login(){const p=password.value.trim().toLocaleUpperCase('tr-TR');
 async function resume(){if(!TOKEN)return;try{const r=await api('resume',{token:TOKEN});if(r.ok){PERSON=r.person;DATA=r.data;openApp()}else{localStorage.removeItem('pm_token');TOKEN=''}}catch(e){}}
 async function logout(){try{await api('logout',{token:TOKEN})}catch(e){}localStorage.removeItem('pm_token');location.reload()}
 function openApp(){auth.classList.add('hidden');shell.classList.remove('hidden');who.textContent=PERSON.adSoyad+' • '+PERSON.departman;buildMenu();nav('home')}
-function buildMenu(){let a=[['home','⌂ Ana Sayfa'],['ann','📣 Duyurular'],['survey','☑ Aylık Anketim'],['mini','◉ Mini Anketler'],['idea','💡 Bir Fikrim Var'],['issue','💬 Bir Sorunum Var'],['records','▣ Kayıtlarım'],['notif','🔔 Bildirimler'],['profile','🔑 Şifre Değiştir']];if(PERSON.isManager)a.push(['manage','📊 Yönetim Özeti']);menu.innerHTML=a.map(x=>`<button data-v="${x[0]}" onclick="nav('${x[0]}');toggleMenu(false)">${x[1]}</button>`).join('')}
+function buildMenu(){
+  let a=[
+    ['home','home','Ana Sayfa'],
+    ['ann','campaign','Duyurular'],
+    ['survey','fact_check','Aylık Anketim'],
+    ['mini','how_to_vote','Mini Anketler'],
+    ['idea','lightbulb','Bir Fikrim Var'],
+    ['issue','forum','Bir Sorunum Var'],
+    ['records','inventory_2','Kayıtlarım'],
+    ['notif','notifications','Bildirimler']
+  ];
+  if(PERSON.isManager)a.push(['manage','analytics','Yönetim Özeti']);
+  menu.innerHTML=a.map(x=>`<button data-v="${x[0]}" onclick="nav('${x[0]}');toggleMenu(false)"><span class="menu-icon">${x[1]}</span><span>${x[2]}</span></button>`).join('')
+}
 function toggleMenu(force){const on=typeof force==='boolean'?force:!sidebar.classList.contains('open');sidebar.classList.toggle('open',on);overlay.classList.toggle('open',on)}
-function nav(v){CURRENT=v;document.querySelectorAll('[data-v]').forEach(x=>x.classList.toggle('active',x.dataset.v===v));({home,ann,survey,mini,idea,issue,records,notif,profile,manage}[v]||home)()}
+function nav(v){CURRENT=v;document.querySelectorAll('[data-v]').forEach(x=>x.classList.toggle('active',x.dataset.v===v));({home,ann,survey,mini,idea,issue,records,notif,manage}[v]||home)()}
 function html(x){return String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function set(h){content.innerHTML=h;scrollTo(0,0)}function stat(n,l){return `<div class="stat"><b>${n}</b><span>${l}</span></div>`}
-function home(){const s=DATA.stats;set(`<div class="hero"><h2>Merhaba, ${html(PERSON.adSoyad.split(' ')[0])}</h2><p style="font-size:13px;margin-top:5px">Fikrini paylaş. Deneyimini aktar. Birlikte geliştirelim.</p></div><div class="stats">${stat(s.unreadAnnouncements,'Okunmamış Duyuru')}${stat(s.pendingSurvey,'Bekleyen Aylık Anket')}${stat(s.pendingMini,'Mini Anket')}${stat(s.myIdeas,'Fikrim')}${stat(s.myIssues,'Bildirimim')}</div><div class="quick"><button onclick="nav('survey')">☑<br>Aylık Anketim</button><button onclick="nav('idea')">💡<br>Bir Fikrim Var</button><button onclick="nav('issue')">💬<br>Bir Sorunum Var</button><button onclick="nav('ann')">📣<br>Duyurular</button></div><div class="card"><div class="section-title">Bu Ay</div>${DATA.surveys.length?(DATA.surveys[0].answered?'<span class="pill">Aylık anket tamamlandı — istediğiniz zaman düzenleyebilirsiniz.</span>':'<b>Aylık anketiniz sizi bekliyor.</b>'):'Bu ay aktif anket yok.'}</div>`)}
+function home(){const s=DATA.stats;set(`<div class="hero"><h2>Merhaba, ${html(PERSON.adSoyad.split(' ')[0])}</h2><p style="font-size:15px;margin-top:6px">Fikrini paylaş. Deneyimini aktar. Birlikte geliştirelim.</p></div><div class="stats">${stat(s.unreadAnnouncements,'Okunmamış Duyuru')}${stat(s.pendingSurvey,'Bekleyen Aylık Anket')}${stat(s.pendingMini,'Mini Anket')}${stat(s.myIdeas,'Fikrim')}${stat(s.myIssues,'Bildirimim')}</div><div class="quick"><button onclick="nav('survey')"><span class="quick-icon">fact_check</span>Aylık Anketim</button><button onclick="nav('idea')"><span class="quick-icon">lightbulb</span>Bir Fikrim Var</button><button onclick="nav('issue')"><span class="quick-icon">forum</span>Bir Sorunum Var</button><button onclick="nav('ann')"><span class="quick-icon">campaign</span>Duyurular</button></div><div class="card"><div class="section-title">Bu Ay</div>${DATA.surveys.length?(DATA.surveys[0].answered?'<span class="pill">Aylık anket tamamlandı — istediğiniz zaman düzenleyebilirsiniz.</span>':'<b>Aylık anketiniz sizi bekliyor.</b>'):'Bu ay aktif anket yok.'}</div>`)}
 function ann(){set(`<div class="section-title">Duyurular</div><div class="card">${DATA.announcements.map(a=>`<div class="list" onclick="openAnn('${a.id}')"><b>${a.read?'':'● '}${html(a.title)}</b><div class="meta">${html(a.summary)}</div></div>`).join('')||'Yayında duyuru yok.'}</div>`)}
 async function openAnn(id){const a=DATA.announcements.find(x=>x.id===id);set(`<button class="link-btn" onclick="ann()">← Geri</button><div class="card"><div class="section-title">${html(a.title)}</div><p>${html(a.content||a.summary).replace(/\n/g,'<br>')}</p></div>`);if(!a.read){a.read=true;await api('markAnnouncementRead',{token:TOKEN,id}).catch(()=>{})}}
 function survey(){if(!DATA.surveys.length)return set('<div class="section-title">Aylık Anketim</div><div class="card">Bu ay aktif anket bulunmuyor.</div>');const s=DATA.surveys[0];set(`<div class="section-title">Aylık Anketim • ${html(s.period)}</div><div class="card"><h3>${html(s.name)}</h3><p class="meta">${html(s.description)}</p><br>${s.answered?'<span class="pill">Tamamlandı</span><br><br><button class="btn" onclick="openSurvey()">Yanıtlarımı Düzenle</button>':'<button class="btn" onclick="openSurvey()">Anketi Doldur</button>'}</div>`)}
 function openSurvey(){const s=DATA.surveys[0];window.ANS={...s.currentAnswers};set(`<button class="link-btn" onclick="survey()">← Geri</button><div class="card"><div class="section-title">${html(s.name)}</div>${s.questions.map(q=>`<div class="field"><label>${html(q.text)}</label>${q.type.includes('PUAN')?`<div class="rating">${[1,2,3,4,5].map((n,i)=>`<button class="${Number(ANS[q.id])===n?'sel':''}" data-q="${q.id}" onclick="rate('${q.id}',${n},this)">${['😢','☹️','😐','😊','😁'][i]}</button>`).join('')}</div>`:`<textarea onchange="ANS['${q.id}']=this.value">${html(ANS[q.id]||'')}</textarea>`}</div>`).join('')}<button class="btn btn-success" onclick="saveSurvey()">${s.answered?'Değişiklikleri Kaydet':'Anketi Kaydet'}</button></div>`)}
 function rate(q,n,e){ANS[q]=n;document.querySelectorAll(`[data-q="${q}"]`).forEach(x=>x.classList.remove('sel'));e.classList.add('sel')}
 async function saveSurvey(){load(1);try{const r=await api('submitSurvey',{token:TOKEN,surveyId:DATA.surveys[0].id,answers:ANS});if(!r.ok)throw Error(r.message);await refresh();survey();alert(r.message)}catch(e){alert(e.message)}finally{load(0)}}
-function mini(){set(`<div class="section-title">Mini Anketler</div>${DATA.miniPolls.map(m=>`<div class="card"><b>${html(m.title)}</b><p class="meta">${html(m.question)}</p><br>${m.answered?'<span class="pill">Katıldınız</span>':m.options.map(o=>`<button class="btn" style="margin-top:7px" onclick="vote('${m.id}','${html(o)}')">${html(o)}</button>`).join('')}</div>`).join('')||'<div class="card">Aktif mini anket yok.</div>'}`)}
-async function vote(id,o){const r=await api('submitMiniPoll',{token:TOKEN,id,option:o});alert(r.message);if(r.ok){await refresh();mini()}}
+function mini(){
+  set(`<div class="section-title">Mini Anketler</div>${DATA.miniPolls.map(m=>`<div class="card"><h3>${html(m.title)}</h3><p class="meta">${html(m.question)}</p><div style="margin-top:12px">${m.options.map(o=>`<button class="mini-option ${m.selected===o?'selected':''}" ${m.answered?'disabled':''} onclick="vote('${m.id}',${JSON.stringify(o)},this)"><span>${html(o)}</span>${m.selected===o?'<span class="mini-check">check</span>':''}</button>`).join('')}</div>${m.answered?'<div class="meta" style="margin-top:10px;color:#168453;font-weight:700">Seçiminiz kaydedildi.</div>':''}</div>`).join('')||'<div class="card">Aktif mini anket yok.</div>'}`)
+}
+async function vote(id,o,el){
+  const box=el.closest('.card');
+  box.querySelectorAll('.mini-option').forEach(b=>{b.classList.remove('selected');b.disabled=true;b.querySelector('.mini-check')?.remove()});
+  el.classList.add('selected');el.insertAdjacentHTML('beforeend','<span class="mini-check">check</span>');
+  try{
+    const r=await api('submitMiniPoll',{token:TOKEN,id,option:o});
+    if(!r.ok)throw Error(r.message);
+    await refresh();mini();
+  }catch(e){
+    alert(e.message);
+    await refresh().catch(()=>{});
+    mini();
+  }
+}
 function idea(){set(`<div class="section-title">Bir Fikrim Var</div><div class="card"><div class="field"><label>Kategori</label><select id="icat"><option value="">Seçiniz</option>${DATA.categories.ideas.map(x=>`<option>${html(x)}</option>`)}</select></div><div class="field"><label>Başlık</label><input id="ititle"></div><div class="field"><label>Fikrinizi anlatın</label><textarea id="idesc"></textarea></div><button class="btn btn-success" onclick="sendIdea()">Fikrimi Gönder</button></div>`)}
 async function sendIdea(){const r=await api('submitIdea',{token:TOKEN,payload:{category:icat.value,title:ititle.value,description:idesc.value}});alert(r.message);if(r.ok){await refresh();records()}}
 function issue(){set(`<div class="section-title">Bir Sorunum Var</div><div class="card"><div class="field"><label>Kategori</label><select id="scat"><option value="">Seçiniz</option>${DATA.categories.issues.map(x=>`<option>${html(x)}</option>`)}</select></div><div class="field"><label>İletilecek Birim</label><select id="srec"><option value="TESIS_IK_MUDURU">Tesis İK Müdürü</option><option value="TESIS_GENEL_MUDURU">Tesis Genel Müdürü</option><option value="GRUP_IK_DIREKTORU">Grup İK Direktörü</option><option value="UST_YONETIM">Üst Yönetim</option></select></div><div class="field"><label>Başlık</label><input id="stitle"></div><div class="field"><label>Sorununuzu anlatın</label><textarea id="sdesc"></textarea></div><div class="field"><label><input id="sanon" type="checkbox" style="width:auto"> Anonim bildirim yapmak istiyorum</label></div><button class="btn btn-success" onclick="sendIssue()">Bildirimi Gönder</button></div>`)}
 async function sendIssue(){const r=await api('submitIssue',{token:TOKEN,payload:{category:scat.value,title:stitle.value,description:sdesc.value,recipient:srec.value,anonymous:sanon.checked}});alert(r.message);if(r.ok){await refresh();records()}}
 function records(){set(`<div class="section-title">Kayıtlarım</div><div class="card"><b>Fikirlerim</b>${DATA.myIdeas.map(x=>`<div class="list"><b>${html(x.BASLIK||x.KATEGORI)}</b><div class="meta">${html(x.KAYIT_NO)} • ${html(x.DURUM)} • ${html(x.KAYIT_TARIHI)}</div></div>`).join('')||'<p class="meta">Kayıt yok.</p>'}</div><div class="card"><b>Sorun Bildirimlerim</b>${DATA.myIssues.map(x=>`<div class="list"><b>${html(x.BASLIK||x.KATEGORI)}</b><div class="meta">${html(x.KAYIT_NO)} • ${html(x.DURUM)} • ${html(x.KAYIT_TARIHI)}</div></div>`).join('')||'<p class="meta">Kayıt yok.</p>'}</div>`)}
 function notif(){set(`<div class="section-title">Bildirimler</div><div class="card">${DATA.notifications.map(x=>`<div class="list"><b>${x.read?'':'● '}${html(x.title)}</b><div class="meta">${html(x.message)} • ${html(x.date)}</div></div>`).join('')||'Bildirim yok.'}</div>`)}
-function profile(){set(`<div class="section-title">Şifre Değiştir</div><div class="card"><div class="field"><label>Eğitim ID</label><input value="${html(PERSON.id)}" disabled></div><div class="field"><label>Eski Şifre</label><input id="oldp" type="password"></div><div class="field"><label>Yeni Şifre</label><input id="newp" type="password"></div><button class="btn" onclick="changePass()">Şifreyi Değiştir</button></div>`)}
-async function changePass(){const r=await api('changePassword',{token:TOKEN,oldPassword:oldp.value,newPassword:newp.value});alert(r.message)}
 async function manage(){const r=await api('managementSummary',{token:TOKEN});if(!r.ok)return alert(r.message);const d=r.data;set(`<div class="section-title">Yönetim Özeti</div><div class="stats">${stat(d.ideas,'Toplam Fikir')}${stat(d.newIdeas,'Yeni Fikir')}${stat(d.issues,'Toplam Sorun')}${stat(d.newIssues,'Yeni Sorun')}</div>`)}
 async function refresh(){const r=await api('bootstrap',{token:TOKEN});if(!r.ok)throw Error(r.message);PERSON=r.person;DATA=r.data}
 window.addEventListener('online',()=>offline.style.display='none');window.addEventListener('offline',()=>offline.style.display='block');
