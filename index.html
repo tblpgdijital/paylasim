@@ -10,7 +10,7 @@
 <title>TUI BLUE Palm Garden Paylaşım Merkezi</title>
 <style>
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f4f7f9;font-family:Arial,sans-serif}
-#appFrame{position:fixed;inset:0;width:100%;height:100%;border:0;background:#f4f7f9}
+#appFrame{position:fixed;inset:0;width:100%;height:100%;border:0;background:#f4f7f9;opacity:0;transition:opacity .18s}
 
 /* ============================================================
    PAYLAŞIM MERKEZİ ORTAK AÇILIŞ ANİMASYONU
@@ -171,13 +171,8 @@ function finish(){
    setTimeout(()=>boot.style.display='none',350);
  },240);
 }
-frame.addEventListener('load',()=>{
- loaded=true;
- if(value<92)value=92;
- paint();
- setTimeout(finish,420);
-});
-setTimeout(()=>{loaded=true;finish()},9000);
+frame.addEventListener('load',()=>{loaded=true;if(value<76)value=76;paint()});
+setTimeout(()=>{if(!finished){frame.style.opacity='1';finish()}},15000);
 
 function validAppsOrigin(origin){
  if(origin==='null')return true;
@@ -188,6 +183,12 @@ function validAppsOrigin(origin){
 window.addEventListener('message',e=>{
  if(!validAppsOrigin(e.origin))return;
  const d=e.data||{};
+
+ if(d.source==='PM_APP'&&d.type==='APP_READY'){
+   loaded=true;value=100;paint();frame.style.opacity='1';finish();
+   return;
+ }
+
  if(d.source!=='PM_APP'||d.type!=='OPEN_MANAGEMENT')return;
  const ticket=String(d.ticket||'');
  if(!/^[a-f0-9]{64}$/i.test(ticket))return;
