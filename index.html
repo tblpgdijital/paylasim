@@ -124,47 +124,76 @@
  }catch(e){}
 })();
 
-
 const PM_EXEC='https://script.google.com/macros/s/AKfycbyce71v4QO3dT6w3d0TJTge3AfvBJWrsVKXcK5Gvg6LZ_rvY4kjjezCjrMSXu36PCry/exec';
-const qs=new URLSearchParams(window.location.search);
-const portal=(qs.get('portal')||'').toLocaleLowerCase('tr-TR')==='yonetim'?'yonetim':'personel';
-const ticket=qs.get('ticket')||'';
+const MGMT_TRANSFER_KEY='pm_management_ticket_transfer';
+
+const legacyQs=new URLSearchParams(window.location.search);
+if((legacyQs.get('portal')||'').toLowerCase()==='yonetim'){
+  const oldTicket=legacyQs.get('ticket')||'';
+  if(/^[a-f0-9]{64}$/i.test(oldTicket)){
+    sessionStorage.setItem(MGMT_TRANSFER_KEY,oldTicket);
+  }
+  window.location.replace('./yonetimindex.html');
+}
+
 const appUrl=new URL(PM_EXEC);
 appUrl.searchParams.set('embed','1');
-appUrl.searchParams.set('v','21');
-if(portal==='yonetim'){
-  appUrl.searchParams.set('portal','yonetim');
-  if(ticket)appUrl.searchParams.set('ticket',ticket);
-}
+appUrl.searchParams.set('v','27');
 document.getElementById('appFrame').src=appUrl.toString();
 
-const boot=document.getElementById('boot'),frame=document.getElementById('appFrame');
-if(portal==='yonetim'){
-  document.title='TUI BLUE Palm Garden - Paylaşım Yönetim Merkezi';
-  const brand=document.querySelector('#boot .pm-loader-brand');
-  const title=document.querySelector('#boot .pm-loader-title');
-  const sub=document.querySelector('#boot .pm-loader-subtitle');
-  if(brand)brand.textContent='TUI BLUE PALM GARDEN • YÖNETİM MERKEZİ';
-  if(title)title.textContent='Yönetim Merkezi hazırlanıyor';
-  if(sub)sub.textContent='Yönetim verileri ve analiz ekranları güvenli olarak hazırlanıyor.';
-}
-const bar=document.getElementById('ghLoaderBar'),pct=document.getElementById('ghLoaderPct'),status=document.getElementById('ghLoaderStatus');
+const boot=document.getElementById('boot');
+const frame=document.getElementById('appFrame');
+const bar=document.getElementById('ghLoaderBar');
+const pct=document.getElementById('ghLoaderPct');
+const status=document.getElementById('ghLoaderStatus');
 const steps=[...document.querySelectorAll('#boot .pm-step')];
+
 let value=8,loaded=false,finished=false;
 function paint(){
  value=Math.min(loaded?100:90,value+(value<45?5:value<72?3:1));
- if(bar)bar.style.width=value+'%';if(pct)pct.textContent=value+'%';
+ if(bar)bar.style.width=value+'%';
+ if(pct)pct.textContent=value+'%';
  if(status)status.textContent=value<28?'Güvenli bağlantı':value<50?'Portal yükleniyor':value<72?'Veriler hazırlanıyor':value<90?'Son kontroller':'Portal hazır';
- const th=[22,44,66,84];steps.forEach((el,i)=>el.classList.toggle('ready',value>=th[i]));
+ const th=[22,44,66,84];
+ steps.forEach((el,i)=>el.classList.toggle('ready',value>=th[i]));
 }
 const timer=setInterval(()=>{paint();if(loaded&&value>=100)finish()},120);
 function finish(){
- if(finished)return;finished=true;clearInterval(timer);
- value=100;paint();steps.forEach(x=>x.classList.add('ready'));
- setTimeout(()=>{boot.style.opacity='0';setTimeout(()=>boot.style.display='none',350)},240);
+ if(finished)return;
+ finished=true;
+ clearInterval(timer);
+ value=100;
+ paint();
+ steps.forEach(x=>x.classList.add('ready'));
+ setTimeout(()=>{
+   boot.style.opacity='0';
+   setTimeout(()=>boot.style.display='none',350);
+ },240);
 }
-frame.addEventListener('load',()=>{loaded=true;if(value<92)value=92;paint();setTimeout(finish,420)});
+frame.addEventListener('load',()=>{
+ loaded=true;
+ if(value<92)value=92;
+ paint();
+ setTimeout(finish,420);
+});
 setTimeout(()=>{loaded=true;finish()},9000);
+
+function validAppsOrigin(origin){
+ if(origin==='null')return true;
+ if(origin==='https://script.google.com')return true;
+ return /^https:\/\/([a-z0-9-]+\.)*googleusercontent\.com$/i.test(String(origin||''));
+}
+
+window.addEventListener('message',e=>{
+ if(!validAppsOrigin(e.origin))return;
+ const d=e.data||{};
+ if(d.source!=='PM_APP'||d.type!=='OPEN_MANAGEMENT')return;
+ const ticket=String(d.ticket||'');
+ if(!/^[a-f0-9]{64}$/i.test(ticket))return;
+
+ sessionStorage.setItem(MGMT_TRANSFER_KEY,ticket);
+ window.location.assign('./yonetimindex.html');
+});
 </script>
 </body>
 </html>

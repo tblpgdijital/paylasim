@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#002b49">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="data:,">
+<title>TUI BLUE Palm Garden - Paylaşım Yönetim Merkezi</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f4f7f9;font-family:Arial,sans-serif}
+#appFrame{position:fixed;inset:0;width:100%;height:100%;border:0;background:#f4f7f9}
+#boot{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:20px;overflow:hidden;color:#fff;background:radial-gradient(circle at 18% 15%,rgba(0,150,136,.22),transparent 33%),radial-gradient(circle at 84% 82%,rgba(0,116,184,.20),transparent 34%),linear-gradient(145deg,#002b49 0%,#004f78 55%,#00344f 100%);transition:opacity .35s}
+.card{width:min(520px,92vw);text-align:center;padding:30px 28px 26px;border-radius:26px;background:linear-gradient(145deg,rgba(255,255,255,.12),rgba(255,255,255,.07));border:1px solid rgba(255,255,255,.17);box-shadow:0 30px 70px rgba(0,0,0,.27),inset 0 1px 0 rgba(255,255,255,.10)}
+.brand{font-size:11px;font-weight:900;letter-spacing:1px;color:rgba(255,255,255,.82)}
+.visual{position:relative;width:180px;height:180px;margin:22px auto 18px}
+.ring{position:absolute;border-radius:50%}.r1{inset:0;border:2px solid rgba(255,255,255,.12);border-top:3px solid #4fe3c8;animation:ring 2.2s linear infinite}.r2{inset:18px;border:1px solid rgba(255,255,255,.14);border-left:2px solid #63cbff;animation:ring 3s linear infinite reverse}.r3{inset:39px;border:2px dashed rgba(255,255,255,.48);animation:ring 4.2s linear infinite}
+.core{position:absolute;inset:55px;border-radius:24px;display:grid;place-items:center;background:linear-gradient(145deg,#0faac5,#0074a8 57%,#00517c);box-shadow:0 14px 35px rgba(0,0,0,.28)}
+.core span{font-size:32px;animation:pulse 1.5s ease-in-out infinite}
+h2{margin:0;font-size:22px}
+p{margin:7px auto 0;max-width:410px;color:rgba(255,255,255,.72);font-size:12px;line-height:1.6}
+.meta{display:flex;justify-content:space-between;font-size:11px;font-weight:800;color:rgba(255,255,255,.82);margin:20px auto 7px;max-width:390px}
+.progress{height:7px;max-width:390px;margin:auto;border-radius:99px;background:rgba(255,255,255,.14);overflow:hidden}.progress span{display:block;height:100%;width:8%;border-radius:99px;background:linear-gradient(90deg,#4fe3c8,#5fc4ff);transition:width .22s}
+@keyframes ring{to{transform:rotate(360deg)}}@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+</style>
+</head>
+<body>
+<div id="boot">
+ <div class="card">
+  <div class="brand">TUI BLUE PALM GARDEN • YÖNETİM MERKEZİ</div>
+  <div class="visual"><div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div><div class="core"><span>◆</span></div></div>
+  <h2>Yönetim Merkezi verileri yükleniyor…</h2>
+  <p>Yetkiniz doğrulanıyor, analiz ve yönetim verileri hazırlanıyor.</p>
+  <div class="meta"><span id="status">Güvenli yönetim bağlantısı</span><span id="pct">8%</span></div>
+  <div class="progress"><span id="bar"></span></div>
+ </div>
+</div>
+
+<iframe id="appFrame" title="TUI BLUE Palm Garden Paylaşım Yönetim Merkezi" src="about:blank" referrerpolicy="no-referrer" loading="eager"></iframe>
+
+<script>
+const PM_EXEC='https://script.google.com/macros/s/AKfycbyce71v4QO3dT6w3d0TJTge3AfvBJWrsVKXcK5Gvg6LZ_rvY4kjjezCjrMSXu36PCry/exec';
+const MGMT_TRANSFER_KEY='pm_management_ticket_transfer';
+const ticket=sessionStorage.getItem(MGMT_TRANSFER_KEY)||'';
+
+const appUrl=new URL(PM_EXEC);
+appUrl.searchParams.set('embed','1');
+appUrl.searchParams.set('portal','yonetim');
+appUrl.searchParams.set('v','27');
+if(/^[a-f0-9]{64}$/i.test(ticket)){
+ appUrl.searchParams.set('ticket',ticket);
+}
+document.getElementById('appFrame').src=appUrl.toString();
+sessionStorage.removeItem(MGMT_TRANSFER_KEY);
+
+const boot=document.getElementById('boot'),frame=document.getElementById('appFrame');
+const bar=document.getElementById('bar'),pct=document.getElementById('pct'),status=document.getElementById('status');
+let v=8,loaded=false,done=false;
+
+function draw(){
+ v=Math.min(loaded?100:90,v+(v<45?5:v<72?3:1));
+ bar.style.width=v+'%';
+ pct.textContent=v+'%';
+ status.textContent=v<30?'Yönetim yetkisi doğrulanıyor':v<60?'Analiz verileri hazırlanıyor':v<88?'Yönetim ekranı hazırlanıyor':'Hazır';
+}
+const timer=setInterval(()=>{draw();if(loaded&&v>=100)finish()},120);
+function finish(){
+ if(done)return;
+ done=true;
+ clearInterval(timer);
+ v=100;draw();
+ setTimeout(()=>{boot.style.opacity='0';setTimeout(()=>boot.style.display='none',350)},220);
+}
+frame.addEventListener('load',()=>{loaded=true;if(v<92)v=92;draw();setTimeout(finish,420)});
+setTimeout(()=>{loaded=true;finish()},9000);
+</script>
+</body>
+</html>
