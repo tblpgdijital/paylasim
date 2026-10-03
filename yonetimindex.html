@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#002b49">
+<link rel="manifest" href="./manifest.webmanifest">
 <meta name="referrer" content="no-referrer">
 <link rel="icon" href="data:,">
 <title>TUI BLUE Palm Garden - Paylaşım Yönetim Merkezi</title>
@@ -74,6 +75,57 @@ function finish(){
 }
 frame.addEventListener('load',()=>{loaded=true;if(v<92)v=92;draw();setTimeout(finish,420)});
 setTimeout(()=>{loaded=true;finish()},9000);
+
+
+let pmDeferredInstallPrompt=null;
+
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();
+  pmDeferredInstallPrompt=e;
+});
+
+function pmStandalone(){
+  return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone===true;
+}
+
+async function pmHandleInstallRequest(sourceWindow){
+  let status='unavailable';
+
+  if(pmStandalone()){
+    status='installed';
+  }else if(pmDeferredInstallPrompt){
+    try{
+      pmDeferredInstallPrompt.prompt();
+      const choice=await pmDeferredInstallPrompt.userChoice;
+      status=choice&&choice.outcome==='accepted'?'accepted':'dismissed';
+      pmDeferredInstallPrompt=null;
+    }catch(e){
+      status='unavailable';
+    }
+  }
+
+  try{
+    sourceWindow.postMessage({source:'PM_SHELL',type:'PWA_INSTALL_RESULT',status},'*');
+  }catch(e){}
+}
+
+window.addEventListener('appinstalled',()=>{
+  pmDeferredInstallPrompt=null;
+});
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(()=>{});
+  });
+}
+
+window.addEventListener('message',e=>{
+  const d=e.data||{};
+  if(d.source==='PM_APP'&&d.type==='PWA_INSTALL_REQUEST'){
+    pmHandleInstallRequest(e.source);
+  }
+});
+
 </script>
 </body>
 </html>
