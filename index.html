@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#002b49">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; frame-src https://script.google.com https://script.googleusercontent.com; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'">
+<link rel="icon" href="data:,">
 <title>TUI BLUE Palm Garden Paylaşım Merkezi</title>
 <style>
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f4f7f9;font-family:Arial,sans-serif}
@@ -130,7 +131,7 @@ const portal=(qs.get('portal')||'').toLocaleLowerCase('tr-TR')==='yonetim'?'yone
 const ticket=qs.get('ticket')||'';
 const appUrl=new URL(PM_EXEC);
 appUrl.searchParams.set('embed','1');
-appUrl.searchParams.set('v','20');
+appUrl.searchParams.set('v','21');
 if(portal==='yonetim'){
   appUrl.searchParams.set('portal','yonetim');
   if(ticket)appUrl.searchParams.set('ticket',ticket);
