@@ -1,4 +1,4 @@
-const CACHE='pm-shell-v65';
+const CACHE='pm-shell-v80';
 const SHELL=[
   './',
   './index.html',
@@ -26,35 +26,46 @@ self.addEventListener('activate',event=>{
   );
 });
 
+async function staleWhileRevalidate(req,fallback){
+  const cache=await caches.open(CACHE);
+  const cached=await cache.match(req);
+
+  const network=fetch(req,{cache:'no-cache'})
+    .then(res=>{
+      if(res&&res.ok)cache.put(req,res.clone());
+      return res;
+    })
+    .catch(()=>null);
+
+  if(cached){
+    network.catch(()=>{});
+    return cached;
+  }
+
+  const res=await network;
+  if(res)return res;
+
+  return fallback?cache.match(fallback):Response.error();
+}
+
 self.addEventListener('fetch',event=>{
   const req=event.request;
-
   if(req.method!=='GET')return;
 
   const url=new URL(req.url);
   if(url.origin!==self.location.origin)return;
 
-  // Sayfa gezinmelerinde her zaman önce ağ.
   if(req.mode==='navigate'){
     event.respondWith(
-      fetch(req,{cache:'no-store'})
-        .then(r=>{
-          const copy=r.clone();
-          caches.open(CACHE).then(c=>c.put(req,copy));
-          return r;
-        })
-        .catch(()=>caches.match(req).then(r=>r||caches.match('./index.html')))
+      staleWhileRevalidate(
+        req,
+        url.pathname.toLowerCase().includes('yonetimindex')
+          ?'./yonetimindex.html'
+          :'./index.html'
+      )
     );
     return;
   }
 
-  event.respondWith(
-    fetch(req)
-      .then(r=>{
-        const copy=r.clone();
-        caches.open(CACHE).then(c=>c.put(req,copy));
-        return r;
-      })
-      .catch(()=>caches.match(req))
-  );
+  event.respondWith(staleWhileRevalidate(req));
 });

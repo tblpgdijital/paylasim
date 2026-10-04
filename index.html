@@ -5,248 +5,112 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#002b49">
 <link rel="manifest" href="./manifest.webmanifest">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; frame-src https://script.google.com https://script.googleusercontent.com; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'">
 <link rel="icon" href="data:,">
 <title>TUI BLUE Palm Garden Paylaşım Merkezi</title>
 <style>
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f4f7f9;font-family:Arial,sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f4f7f9;font-family:Arial,sans-serif}
 #appFrame{position:fixed;inset:0;width:100%;height:100%;border:0;background:#f4f7f9;opacity:0;transition:opacity .18s}
-
-/* ============================================================
-   PAYLAŞIM MERKEZİ ORTAK AÇILIŞ ANİMASYONU
-   GitHub açılışı ve şifre sonrası girişte aynı görsel kullanılır.
-   ============================================================ */
-.pm-loader-screen{
-  position:fixed;inset:0;z-index:7000;display:flex;align-items:center;justify-content:center;
-  padding:20px;overflow:hidden;color:#fff;
-  background:
-    radial-gradient(circle at 18% 15%,rgba(0,150,136,.22),transparent 33%),
-    radial-gradient(circle at 84% 82%,rgba(0,116,184,.20),transparent 34%),
-    linear-gradient(145deg,#002b49 0%,#004f78 55%,#00344f 100%);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)
-}
-.pm-loader-card{
-  width:min(520px,92vw);text-align:center;padding:30px 28px 26px;border-radius:26px;
-  background:linear-gradient(145deg,rgba(255,255,255,.12),rgba(255,255,255,.07));
-  border:1px solid rgba(255,255,255,.17);
-  box-shadow:0 30px 70px rgba(0,0,0,.27),inset 0 1px 0 rgba(255,255,255,.10);
-  position:relative;overflow:hidden
-}
-.pm-loader-card:before{
-  content:"";position:absolute;inset:-40%;background:linear-gradient(115deg,transparent 44%,rgba(255,255,255,.08) 50%,transparent 56%);
-  animation:pmShine 3.8s ease-in-out infinite;pointer-events:none
-}
-.pm-loader-brand{position:relative;font-size:11px;font-weight:900;letter-spacing:1.05px;color:rgba(255,255,255,.82)}
-.pm-sync-visual{position:relative;width:184px;height:184px;margin:22px auto 18px}
-.pm-ring{position:absolute;border-radius:50%}
-.pm-ring-1{inset:0;border:2px solid rgba(255,255,255,.12);border-top:3px solid #4fe3c8;animation:pmRing 2.2s linear infinite}
-.pm-ring-2{inset:18px;border:1px solid rgba(255,255,255,.14);border-left:2px solid #63cbff;animation:pmRing 3s linear infinite reverse}
-.pm-ring-3{inset:39px;border:2px dashed rgba(255,255,255,.48);animation:pmRing 4.2s linear infinite}
-.pm-sync-core{
-  position:absolute;inset:55px;border-radius:24px;display:grid;place-items:center;
-  background:linear-gradient(145deg,#0faac5,#0074a8 57%,#00517c);
-  box-shadow:0 14px 35px rgba(0,0,0,.28),0 0 32px rgba(79,227,200,.15);
-  animation:pmCore 1.8s ease-in-out infinite
-}
-.pm-sync-core span{font-size:36px;font-weight:900;display:block;animation:pmCoreSpin 2.8s linear infinite}
-.pm-sync-dot{
-  position:absolute;width:35px;height:35px;border-radius:50%;display:grid;place-items:center;
-  background:#fff;color:#006b9c;border:3px solid rgba(0,43,73,.12);
-  box-shadow:0 8px 22px rgba(0,0,0,.19);font-size:15px;font-weight:900
-}
-.pm-sync-dot.d1{left:-2px;top:72px;animation:pmDot 2.4s ease-in-out infinite}
-.pm-sync-dot.d2{right:8px;top:18px;animation:pmDot 2.4s ease-in-out .35s infinite}
-.pm-sync-dot.d3{right:-2px;bottom:26px;animation:pmDot 2.4s ease-in-out .7s infinite}
-.pm-sync-dot.d4{left:25px;bottom:4px;animation:pmDot 2.4s ease-in-out 1.05s infinite}
-.pm-loader-title{position:relative;margin:0;font-size:22px;line-height:1.35;font-weight:900}
-.pm-loader-subtitle{position:relative;margin:7px auto 0;max-width:410px;color:rgba(255,255,255,.72);font-size:12px;line-height:1.6}
-.pm-loader-progress-wrap{position:relative;margin:21px auto 0;max-width:390px}
-.pm-loader-progress-meta{display:flex;justify-content:space-between;font-size:11px;font-weight:800;color:rgba(255,255,255,.82);margin-bottom:7px}
-.pm-loader-progress{height:7px;border-radius:99px;background:rgba(255,255,255,.14);overflow:hidden}
-.pm-loader-progress span{display:block;height:100%;width:8%;border-radius:99px;background:linear-gradient(90deg,#4fe3c8,#5fc4ff);transition:width .22s ease;box-shadow:0 0 14px rgba(79,227,200,.38)}
-.pm-loader-steps{position:relative;margin-top:16px;display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
-.pm-step{padding:7px 5px;border-radius:9px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.06);color:rgba(255,255,255,.55);font-size:10px;font-weight:800;transition:.22s}
-.pm-step.ready{background:rgba(79,227,200,.14);border-color:rgba(79,227,200,.36);color:#d9fff7}
-@keyframes pmRing{to{transform:rotate(360deg)}}
-@keyframes pmCore{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
-@keyframes pmCoreSpin{to{transform:rotate(360deg)}}
-@keyframes pmDot{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-6px) scale(1.07)}}
-@keyframes pmShine{0%,55%{transform:translateX(-45%) rotate(10deg)}90%,100%{transform:translateX(45%) rotate(10deg)}}
-@media(max-width:600px){
-  .pm-loader-card{padding:24px 16px 20px;border-radius:22px}
-  .pm-sync-visual{width:164px;height:164px}
-  .pm-sync-core{inset:50px}
-  .pm-loader-title{font-size:19px}
-  .pm-loader-steps{gap:5px}
-  .pm-step{font-size:9px;padding:6px 3px}
-}
-
-#boot{z-index:20}
+#boot{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:20px;color:#fff;background:radial-gradient(circle at 18% 15%,rgba(0,150,136,.22),transparent 33%),radial-gradient(circle at 84% 82%,rgba(0,116,184,.20),transparent 34%),linear-gradient(145deg,#002b49,#004f78 55%,#00344f);transition:opacity .3s}
+.card{width:min(500px,92vw);text-align:center;padding:28px 24px 24px;border-radius:25px;background:linear-gradient(145deg,rgba(255,255,255,.12),rgba(255,255,255,.07));border:1px solid rgba(255,255,255,.17);box-shadow:0 28px 65px rgba(0,0,0,.27)}
+.brand{font-size:11px;font-weight:900;letter-spacing:1px;color:rgba(255,255,255,.84)}
+.visual{position:relative;width:145px;height:145px;margin:19px auto 15px}.ring{position:absolute;border-radius:50%}.r1{inset:0;border:2px solid rgba(255,255,255,.12);border-top:3px solid #4fe3c8;animation:ring 2.1s linear infinite}.r2{inset:17px;border:1px solid rgba(255,255,255,.15);border-left:2px solid #63cbff;animation:ring 2.8s linear infinite reverse}.core{position:absolute;inset:43px;border-radius:23px;display:grid;place-items:center;background:linear-gradient(145deg,#0faac5,#0074a8 57%,#00517c);box-shadow:0 14px 35px rgba(0,0,0,.28)}.core span{font-size:31px;animation:pulse 1.5s ease-in-out infinite}
+h2{margin:0;font-size:21px}p{margin:7px auto 0;color:rgba(255,255,255,.72);font-size:12px;line-height:1.55}
+.meta{display:flex;justify-content:space-between;margin:18px auto 7px;max-width:390px;font-size:10px;font-weight:800;color:rgba(255,255,255,.82)}.progress{height:7px;max-width:390px;margin:auto;border-radius:99px;background:rgba(255,255,255,.14);overflow:hidden}.progress span{display:block;height:100%;width:10%;border-radius:99px;background:linear-gradient(90deg,#4fe3c8,#5fc4ff);transition:width .2s}
+@keyframes ring{to{transform:rotate(360deg)}}@keyframes pulse{50%{transform:scale(1.1)}}
 </style>
 </head>
 <body>
-<div id="boot" class="pm-loader-screen"><div class="pm-loader-card">
-  <div class="pm-loader-brand">TUI BLUE PALM GARDEN • PAYLAŞIM MERKEZİ</div>
-  <div class="pm-sync-visual" aria-hidden="true">
-    <div class="pm-ring pm-ring-1"></div>
-    <div class="pm-ring pm-ring-2"></div>
-    <div class="pm-ring pm-ring-3"></div>
-    <div class="pm-sync-core"><span>↻</span></div>
-    <span class="pm-sync-dot d1">✓</span>
-    <span class="pm-sync-dot d2">✦</span>
-    <span class="pm-sync-dot d3">☑</span>
-    <span class="pm-sync-dot d4">●</span>
-  </div>
-  <h2 class="pm-loader-title">Paylaşım Merkezi hazırlanıyor</h2>
-  <p class="pm-loader-subtitle">Güvenli bağlantı kuruluyor ve portal verileriniz hazırlanıyor.</p>
-  <div class="pm-loader-progress-wrap">
-    <div class="pm-loader-progress-meta"><span id="ghLoaderStatus">Güvenli bağlantı</span><span id="ghLoaderPct">8%</span></div>
-    <div class="pm-loader-progress"><span id="ghLoaderBar"></span></div>
-  </div>
-  <div class="pm-loader-steps">
-    <div class="pm-step" data-step="1">Giriş</div>
-    <div class="pm-step" data-step="2">Anketler</div>
-    <div class="pm-step" data-step="3">Paylaşımlar</div>
-    <div class="pm-step" data-step="4">Hazır</div>
-  </div>
+<div id="boot"><div class="card">
+ <div class="brand">TUI BLUE PALM GARDEN • PAYLAŞIM MERKEZİ</div>
+ <div class="visual"><div class="ring r1"></div><div class="ring r2"></div><div class="core"><span>↻</span></div></div>
+ <h2>Paylaşım Merkezi açılıyor</h2>
+ <p>Önbelleğe alınmış portal kabuğu hazırlanıyor. Personel verileriniz uygunsa anında gösterilecek.</p>
+ <div class="meta"><span id="status">Güvenli bağlantı</span><span id="pct">10%</span></div>
+ <div class="progress"><span id="bar"></span></div>
 </div></div>
 <iframe id="appFrame" title="TUI BLUE Palm Garden Paylaşım Merkezi" src="about:blank" referrerpolicy="no-referrer" loading="eager"></iframe>
 <script>
-(async()=>{
- try{
-  if('serviceWorker' in navigator){
-   const regs=await navigator.serviceWorker.getRegistrations();
-   for(const r of regs)await r.unregister();
-  }
-  if(window.caches){
-   const keys=await caches.keys();
-   await Promise.all(keys.map(k=>caches.delete(k)));
-  }
- }catch(e){}
-})();
-
 const PM_EXEC='https://script.google.com/macros/s/AKfycbyce71v4QO3dT6w3d0TJTge3AfvBJWrsVKXcK5Gvg6LZ_rvY4kjjezCjrMSXu36PCry/exec';
+const SHELL_VERSION='80';
 const MGMT_TRANSFER_KEY='pm_management_ticket_transfer';
 
-const legacyQs=new URLSearchParams(window.location.search);
+const legacyQs=new URLSearchParams(location.search);
 if((legacyQs.get('portal')||'').toLowerCase()==='yonetim'){
-  const oldTicket=legacyQs.get('ticket')||'';
-  if(/^[a-f0-9]{64}$/i.test(oldTicket)){
-    sessionStorage.setItem(MGMT_TRANSFER_KEY,oldTicket);
-  }
-  window.location.replace('./yonetimindex.html');
+  const ticket=legacyQs.get('ticket')||'';
+  if(/^[a-f0-9]{64}$/i.test(ticket))sessionStorage.setItem(MGMT_TRANSFER_KEY,ticket);
+  location.replace('./yonetimindex.html');
 }
 
 const appUrl=new URL(PM_EXEC);
 appUrl.searchParams.set('embed','1');
-appUrl.searchParams.set('v','27');
-document.getElementById('appFrame').src=appUrl.toString();
+appUrl.searchParams.set('v',SHELL_VERSION);
 
-const boot=document.getElementById('boot');
 const frame=document.getElementById('appFrame');
-const bar=document.getElementById('ghLoaderBar');
-const pct=document.getElementById('ghLoaderPct');
-const status=document.getElementById('ghLoaderStatus');
-const steps=[...document.querySelectorAll('#boot .pm-step')];
+const boot=document.getElementById('boot');
+const bar=document.getElementById('bar');
+const pct=document.getElementById('pct');
+const status=document.getElementById('status');
+frame.src=appUrl.toString();
 
-let value=8,loaded=false,finished=false;
-function paint(){
- value=Math.min(loaded?100:90,value+(value<45?5:value<72?3:1));
- if(bar)bar.style.width=value+'%';
- if(pct)pct.textContent=value+'%';
- if(status)status.textContent=value<28?'Güvenli bağlantı':value<50?'Portal yükleniyor':value<72?'Veriler hazırlanıyor':value<90?'Son kontroller':'Portal hazır';
- const th=[22,44,66,84];
- steps.forEach((el,i)=>el.classList.toggle('ready',value>=th[i]));
-}
-const timer=setInterval(()=>{paint();if(loaded&&value>=100)finish()},120);
+let value=10,ready=false,loaded=false;
+const timer=setInterval(()=>{
+  value=Math.min(ready?100:loaded?92:78,value+(value<45?6:value<75?3:1));
+  bar.style.width=value+'%';pct.textContent=value+'%';
+  status.textContent=value<35?'Güvenli bağlantı':value<70?'Portal hazırlanıyor':value<95?'Personel önbelleği kontrol ediliyor':'Hazır';
+  if(ready&&value>=100)finish();
+},120);
+
 function finish(){
- if(finished)return;
- finished=true;
- clearInterval(timer);
- value=100;
- paint();
- steps.forEach(x=>x.classList.add('ready'));
- setTimeout(()=>{
-   boot.style.opacity='0';
-   setTimeout(()=>boot.style.display='none',350);
- },240);
+  if(boot.style.display==='none')return;
+  clearInterval(timer);frame.style.opacity='1';
+  boot.style.opacity='0';
+  setTimeout(()=>boot.style.display='none',300);
 }
-frame.addEventListener('load',()=>{loaded=true;if(value<76)value=76;paint()});
-setTimeout(()=>{if(!finished){frame.style.opacity='1';finish()}},15000);
+
+frame.addEventListener('load',()=>{loaded=true;if(value<75)value=75});
+setTimeout(()=>{if(!ready){frame.style.opacity='1';finish()}},9000);
 
 function validAppsOrigin(origin){
- if(origin==='null')return true;
- if(origin==='https://script.google.com')return true;
- return /^https:\/\/([a-z0-9-]+\.)*googleusercontent\.com$/i.test(String(origin||''));
+  if(origin==='null'||origin==='https://script.google.com')return true;
+  return /^https:\/\/([a-z0-9-]+\.)*googleusercontent\.com$/i.test(String(origin||''));
 }
 
 window.addEventListener('message',e=>{
- if(!validAppsOrigin(e.origin))return;
- const d=e.data||{};
+  if(!validAppsOrigin(e.origin))return;
+  const d=e.data||{};
 
- if(d.source==='PM_APP'&&d.type==='APP_READY'){
-   loaded=true;value=100;paint();frame.style.opacity='1';finish();
-   return;
- }
-
- if(d.source!=='PM_APP'||d.type!=='OPEN_MANAGEMENT')return;
- const ticket=String(d.ticket||'');
- if(!/^[a-f0-9]{64}$/i.test(ticket))return;
-
- sessionStorage.setItem(MGMT_TRANSFER_KEY,ticket);
- window.location.assign('./yonetimindex.html');
-});
-
-
-let pmDeferredInstallPrompt=null;
-
-window.addEventListener('beforeinstallprompt',e=>{
-  e.preventDefault();
-  pmDeferredInstallPrompt=e;
-});
-
-function pmStandalone(){
-  return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone===true;
-}
-
-async function pmHandleInstallRequest(sourceWindow){
-  let status='unavailable';
-
-  if(pmStandalone()){
-    status='installed';
-  }else if(pmDeferredInstallPrompt){
-    try{
-      pmDeferredInstallPrompt.prompt();
-      const choice=await pmDeferredInstallPrompt.userChoice;
-      status=choice&&choice.outcome==='accepted'?'accepted':'dismissed';
-      pmDeferredInstallPrompt=null;
-    }catch(e){
-      status='unavailable';
-    }
+  if(d.source==='PM_APP'&&d.type==='APP_READY'){
+    ready=true;value=100;bar.style.width='100%';pct.textContent='100%';status.textContent='Hazır';finish();return;
   }
 
-  try{
-    sourceWindow.postMessage({source:'PM_SHELL',type:'PWA_INSTALL_RESULT',status},'*');
-  }catch(e){}
-}
+  if(d.source==='PM_APP'&&d.type==='OPEN_MANAGEMENT'){
+    const ticket=String(d.ticket||'');
+    if(!/^[a-f0-9]{64}$/i.test(ticket))return;
+    sessionStorage.setItem(MGMT_TRANSFER_KEY,ticket);
+    location.assign('./yonetimindex.html');
+    return;
+  }
 
-window.addEventListener('appinstalled',()=>{
-  pmDeferredInstallPrompt=null;
+  if(d.source==='PM_APP'&&d.type==='PWA_INSTALL_REQUEST')pmHandleInstallRequest(e.source);
 });
+
+let deferredInstall=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e});
+window.addEventListener('appinstalled',()=>deferredInstall=null);
+function standalone(){return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}
+async function pmHandleInstallRequest(source){
+  let status='unavailable';
+  if(standalone())status='installed';
+  else if(deferredInstall){
+    try{deferredInstall.prompt();const c=await deferredInstall.userChoice;status=c?.outcome==='accepted'?'accepted':'dismissed';deferredInstall=null}catch(_){}
+  }
+  try{source.postMessage({source:'PM_SHELL',type:'PWA_INSTALL_RESULT',status},'*')}catch(_){}
+}
 
 if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(()=>{});
-  });
+  addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(()=>{}));
 }
-
-window.addEventListener('message',e=>{
-  const d=e.data||{};
-  if(d.source==='PM_APP'&&d.type==='PWA_INSTALL_REQUEST'){
-    pmHandleInstallRequest(e.source);
-  }
-});
-
 </script>
 </body>
 </html>
