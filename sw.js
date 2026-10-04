@@ -1,4 +1,4 @@
-const CACHE='pm-shell-v64';
+const CACHE='pm-shell-v65';
 const SHELL=[
   './',
   './index.html',
